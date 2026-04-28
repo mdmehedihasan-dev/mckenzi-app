@@ -45,7 +45,7 @@ export default function Authentication() {
           <TouchableOpacity 
             style={styles.guestButton}
             activeOpacity={0.8}
-            onPress={() => router.push('/')}
+            onPress={() => router.push('/Camera')}
           >
             <Text style={styles.guestButtonText}>Continue as Guest</Text>
           </TouchableOpacity>
