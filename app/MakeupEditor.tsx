@@ -63,6 +63,8 @@ export default function MakeupEditor() {
   const { photoUri } = useLocalSearchParams<{ photoUri: string }>();
   const [activeTab, setActiveTab] = React.useState('lips');
   
+  const [activeAction, setActiveAction] = React.useState('swap');
+  
   const handleBack = () => {
     router.back();
   };
@@ -101,18 +103,30 @@ export default function MakeupEditor() {
           {/* Control Section */}
           <View style={styles.controlSection}>
             
-            {/* Quick Actions */}
-            <View style={styles.quickActionsRow}>
-              <TouchableOpacity style={styles.actionCircle}>
-                <Ionicons name="swap-horizontal" size={22} color="#FFFFFF" />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.actionCircle}>
-                <EyebrowIcon color="#FFFFFF" />
-              </TouchableOpacity>
-            </View>
+            
 
             {/* Main Tabs */}
             <View style={styles.tabsContainer}>
+              {/* Quick Actions */}
+            <View style={styles.quickActionsRow}>
+              <TouchableOpacity 
+                style={[styles.actionCircle, activeAction === 'swap' && { backgroundColor: '#362645', borderColor: '#362645' }]} 
+                onPress={() => setActiveAction('swap')}
+              >
+                <Ionicons 
+                  name="swap-horizontal" 
+                  size={22} 
+                  color="#FFFFFF" 
+                />
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[styles.actionCircle, activeAction === 'eyebrow' && { backgroundColor: '#362645', borderColor: '#362645' }]} 
+                onPress={() => setActiveAction('eyebrow')}
+              >
+                <EyebrowIcon color="#FFFFFF" />
+              </TouchableOpacity>
+            </View>
+             <View style={{height: 30}}></View>
               <View style={styles.tabsInner}>
                 {TABS.map((tab) => (
                   <TouchableOpacity 
@@ -216,7 +230,7 @@ const styles = StyleSheet.create({
   },
   tabsContainer: {
     backgroundColor: 'rgba(12, 12, 12, 0.88)', 
-    borderRadius: 36,
+    borderRadius: 16,
     paddingVertical: 24,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.06)',
