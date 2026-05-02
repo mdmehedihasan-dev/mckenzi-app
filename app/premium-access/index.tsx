@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { InfiniteStorageIcon, PrecisionToolsIcon, PriorityCurationIcon } from '../../components/icons/BrandedIcons';
+import { InfiniteStorageIcon, PrecisionToolsIcon, PriorityCurationIcon, PremiumSparkleIcon } from '../../components/icons/BrandedIcons';
 
 const FeatureItem = ({ icon, title, description }: { icon: any, title: string, description: string }) => (
   <View style={styles.featureItem}>
@@ -48,7 +48,7 @@ const PremiumAccess = () => {
       >
         {/* Top Icon */}
         <View style={styles.topIconContainer}>
-          <Ionicons name="sparkles-outline" size={80} color="#7C4DFF" />
+          <PremiumSparkleIcon />
         </View>
 
         {/* Hero Text */}
