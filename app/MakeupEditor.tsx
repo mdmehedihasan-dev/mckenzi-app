@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, SafeAreaView, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity, ScrollView, Button } from 'react-native';
 import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 
 const STEPS = [
   'MENU',
@@ -13,6 +14,24 @@ const STEPS = [
 
 export default function MakeupEditor() {
   const [stepIndex, setStepIndex] = useState(0);
+  const [permission, requestPermission] = useCameraPermissions();
+
+  if (!permission) {
+    // Camera permissions are still loading.
+    return <View style={styles.container} />;
+  }
+
+  if (!permission.granted) {
+    // Camera permissions are not granted yet.
+    return (
+      <View style={styles.permissionContainer}>
+        <Text style={styles.permissionText}>We need your permission to show the camera</Text>
+        <TouchableOpacity style={styles.permissionBtn} onPress={requestPermission}>
+          <Text style={styles.permissionBtnText}>Grant Permission</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   const nextStep = () => {
     if (stepIndex < STEPS.length - 1) {
@@ -36,9 +55,9 @@ export default function MakeupEditor() {
     <View style={styles.container}>
       <StatusBar style="light" />
       
-      <ImageBackground 
-        source={require('../assets/images/face_clean.png')} 
-        style={styles.backgroundImage}
+      <CameraView 
+        style={styles.camera} 
+        facing="front"
       >
         <SafeAreaView style={styles.overlay}>
           {/* Header */}
@@ -165,7 +184,7 @@ export default function MakeupEditor() {
             )}
           </View>
         </SafeAreaView>
-      </ImageBackground>
+      </CameraView>
     </View>
   );
 }
@@ -175,12 +194,36 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
   },
-  backgroundImage: {
+  camera: {
     flex: 1,
   },
   overlay: {
     flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.1)',
     justifyContent: 'space-between',
+  },
+  permissionContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000',
+    padding: 20,
+  },
+  permissionText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  permissionBtn: {
+    backgroundColor: '#A855F7',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 12,
+  },
+  permissionBtnText: {
+    color: '#FFFFFF',
+    fontWeight: '700',
   },
   header: {
     flexDirection: 'row',
