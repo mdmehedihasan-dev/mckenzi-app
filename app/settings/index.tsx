@@ -13,7 +13,7 @@ import {
 import { Ionicons, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { EditProfileIcon } from '../../components/icons/BrandedIcons';
+import { EditProfileIcon, LogoutIcon, PlanIcon, ManageSubscriptionIcon, AutoApplyIcon, HapticIcon, SupportIcon, PrivacyIcon, TermsIcon, VersionIcon } from '../../components/icons/BrandedIcons';
 
 const SettingItem = ({ 
   icon, 
@@ -101,10 +101,10 @@ export default function Settings() {
             label="Edit Profile" 
             onPress={() => {}} 
           />
-          <SettingItem 
-            icon="logout-variant" 
+           <SettingItem 
+            icon={<LogoutIcon />} 
             label="Logout" 
-            color="#EA4335"
+            color="#BA1A1A"
             onPress={() => router.replace('/authentication' as any)}
             isLast={true}
           />
@@ -113,7 +113,7 @@ export default function Settings() {
         {/* Subscription Section */}
         <Section title="SUBSCRIPTION">
           <SettingItem 
-            icon="card-account-details-outline" 
+            icon={<PlanIcon />} 
             label="Current Plan" 
             rightElement={
               <View style={styles.proBadge}>
@@ -122,7 +122,7 @@ export default function Settings() {
             }
           />
           <SettingItem 
-            icon="cog-outline" 
+            icon={<ManageSubscriptionIcon />} 
             label="Manage Subscription" 
             onPress={() => {}}
             isLast={true}
@@ -132,7 +132,7 @@ export default function Settings() {
         {/* App Preferences Section */}
         <Section title="APP PREFERENCES">
           <SettingItem 
-            icon="auto-fix" 
+            icon={<AutoApplyIcon />} 
             label="Auto-Apply Last Look" 
             rightElement={
               <Switch 
@@ -144,7 +144,7 @@ export default function Settings() {
             }
           />
           <SettingItem 
-            icon="vibrate" 
+            icon={<HapticIcon />} 
             label="Haptic Feedback" 
             isLast={true}
             rightElement={
@@ -161,22 +161,22 @@ export default function Settings() {
         {/* About Section */}
         <Section title="ABOUT">
           <SettingItem 
-            icon="help-circle-outline" 
+            icon={<SupportIcon />} 
             label="Help & support" 
             onPress={() => {}} 
           />
           <SettingItem 
-            icon="shield-check-outline" 
+            icon={<PrivacyIcon />} 
             label="Privacy Policy" 
             onPress={() => {}} 
           />
           <SettingItem 
-            icon="file-document-outline" 
+            icon={<TermsIcon />} 
             label="Terms of Service" 
             onPress={() => {}} 
           />
           <SettingItem 
-            icon="information-outline" 
+            icon={<VersionIcon />} 
             label="App Version" 
             rightElement={<Text style={styles.versionText}>2.4.1</Text>}
             isLast={true}
