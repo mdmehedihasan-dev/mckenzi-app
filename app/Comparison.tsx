@@ -3,17 +3,13 @@ import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity, PanResponder, D
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Image } from 'expo-image';
+import { CameraView } from 'expo-camera';
 
 const { width, height } = Dimensions.get('window');
 
 export default function Comparison() {
   const { photoUri } = useLocalSearchParams<{ photoUri: string }>();
   const [sliderPos, setSliderPos] = useState(width / 2);
-
-  const beforeImage = photoUri ? { uri: photoUri } : require('../assets/images/face_clean.png');
-  // Use the same real photo for 'After' but with a simulated beauty effect
-  const afterImage = photoUri ? { uri: photoUri } : require('../assets/images/face_makeup.png');
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -30,30 +26,12 @@ export default function Comparison() {
     <View style={styles.container}>
       <StatusBar style="light" />
       
-      {/* Before Image (Bottom Layer) */}
-      <View style={styles.imageLayer}>
-        <Image 
-          source={beforeImage} 
-          style={styles.fullImage}
-          contentFit="cover"
-        />
-        <View style={styles.labelContainerLeft}>
-          <Text style={styles.label}>BEFORE</Text>
-        </View>
-      </View>
+      {/* Background: Live Camera Feed */}
+      <CameraView style={StyleSheet.absoluteFill} facing="front" />
 
-      {/* After Image (Top Layer, Clipped) */}
-      <View style={[styles.imageLayer, { width: sliderPos, overflow: 'hidden', position: 'absolute', top: 0, left: 0, zIndex: 1 }]}>
-        <Image 
-          source={afterImage} 
-          style={[styles.fullImage, { width: width }]} 
-          contentFit="cover"
-        />
-        {/* Simulated Beauty/Makeup Tint */}
-        <View style={[styles.beautyOverlay, { width: width }]} />
-        <View style={styles.labelContainerRight}>
-          <Text style={styles.label}>AFTER</Text>
-        </View>
+      {/* After Layer (Right side of slider) - Simulated with a beauty tint */}
+      <View style={[styles.imageLayer, { left: sliderPos, right: 0, overflow: 'hidden', position: 'absolute', top: 0, zIndex: 1 }]}>
+        <View style={styles.beautyOverlay} />
       </View>
 
       {/* Slider Handle */}
@@ -63,7 +41,7 @@ export default function Comparison() {
       >
         <View style={styles.sliderLine} />
         <View style={styles.sliderCircle}>
-           <Ionicons name="swap-horizontal" size={20} color="#000" />
+           <View style={styles.purpleDot} />
         </View>
       </View>
 
@@ -82,16 +60,23 @@ export default function Comparison() {
         {/* Footer Actions */}
         <View style={styles.footer}>
            <View style={styles.glassFooter}>
-              <View style={styles.statsRow}>
-                 <Text style={styles.statLabel}>BEFORE</Text>
-                 <View style={styles.statDivider} />
-                 <Text style={styles.statLabel}>AFTER</Text>
+              <View style={styles.labelRow}>
+                <Text style={styles.label}>BEFORE</Text>
+                <Ionicons name="swap-horizontal" size={14} color="#9CA3AF" />
+                <Text style={[styles.label, { color: '#FFFFFF' }]}>AFTER</Text>
               </View>
+              
               <View style={styles.btnRow}>
-                 <TouchableOpacity style={styles.secondaryBtn} onPress={() => router.push('/MakeupEditor')}>
+                 <TouchableOpacity 
+                   style={styles.secondaryBtn} 
+                   onPress={() => router.push('/MakeupEditor')}
+                 >
                     <Text style={styles.secondaryBtnText}>Try Another</Text>
                  </TouchableOpacity>
-                 <TouchableOpacity style={styles.primaryBtn} onPress={() => router.push('/Authentication')}>
+                 <TouchableOpacity 
+                   style={styles.primaryBtn} 
+                   onPress={() => router.push('/Authentication')}
+                 >
                     <Text style={styles.primaryBtnText}>Save Look</Text>
                  </TouchableOpacity>
               </View>
@@ -109,14 +94,11 @@ const styles = StyleSheet.create({
   },
   imageLayer: {
     height: height,
-  },
-  fullImage: {
-    width: width,
-    height: height,
+    backgroundColor: 'rgba(216, 180, 254, 0.15)', // Simulated makeup tint
   },
   beautyOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(168, 85, 247, 0.08)', // Subtle purple glow
+    backgroundColor: 'rgba(255, 105, 180, 0.1)', // Subtle pinkish beauty glow
   },
   sliderHandleContainer: {
     position: 'absolute',
@@ -125,32 +107,36 @@ const styles = StyleSheet.create({
     width: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 10,
+    zIndex: 100,
   },
   sliderLine: {
     position: 'absolute',
     top: 0,
     bottom: 0,
     width: 2,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.5)',
   },
   sliderCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 10,
     shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
+  },
+  purpleDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#5E33E1',
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'space-between',
-    zIndex: 20,
+    zIndex: 50,
     pointerEvents: 'box-none',
   },
   header: {
@@ -158,66 +144,50 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 15,
   },
   headerBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
   },
   compareText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: '800',
-    letterSpacing: 2,
-  },
-  labelContainerLeft: {
-    position: 'absolute',
-    top: '15%',
-    left: 20,
-  },
-  labelContainerRight: {
-    position: 'absolute',
-    top: '15%',
-    right: 20,
-  },
-  label: {
-    color: '#FFFFFF',
-    fontSize: 10,
-    fontWeight: '700',
-    letterSpacing: 1,
-    opacity: 0.8,
+    color: '#D8B4FE', // Light purple for COMPARE
+    fontSize: 14,
+    fontWeight: '900',
+    letterSpacing: 3,
   },
   footer: {
     paddingHorizontal: 20,
     paddingBottom: 40,
   },
   glassFooter: {
-    backgroundColor: 'rgba(0,0,0,0.7)',
-    borderRadius: 24,
-    padding: 20,
+    backgroundColor: 'rgba(12, 12, 12, 0.85)',
+    borderRadius: 32,
+    padding: 24,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.1)',
+    shadowColor: '#000',
+    shadowRadius: 20,
+    shadowOpacity: 0.4,
   },
-  statsRow: {
+  labelRow: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 12,
+    gap: 15,
     marginBottom: 20,
   },
-  statLabel: {
+  label: {
     color: '#9CA3AF',
-    fontSize: 10,
-    fontWeight: '700',
-  },
-  statDivider: {
-    width: 1,
-    height: 10,
-    backgroundColor: '#374151',
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 1,
   },
   btnRow: {
     flexDirection: 'row',
@@ -226,8 +196,8 @@ const styles = StyleSheet.create({
   secondaryBtn: {
     flex: 1,
     backgroundColor: 'rgba(255,255,255,0.1)',
-    height: 50,
-    borderRadius: 25,
+    height: 54,
+    borderRadius: 27,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
@@ -235,20 +205,20 @@ const styles = StyleSheet.create({
   },
   secondaryBtnText: {
     color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '700',
   },
   primaryBtn: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    height: 50,
-    borderRadius: 25,
+    height: 54,
+    borderRadius: 27,
     justifyContent: 'center',
     alignItems: 'center',
   },
   primaryBtnText: {
-    color: '#000000',
-    fontSize: 14,
-    fontWeight: '700',
+    color: '#3E2B63',
+    fontSize: 15,
+    fontWeight: '800',
   },
 });

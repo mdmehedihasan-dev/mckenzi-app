@@ -123,8 +123,8 @@ export default function DetectionProcessing() {
 
   const handleActionSelect = () => {
     router.push({
-      pathname: '/Comparison',
-      params: { photoUri }
+      pathname: '/GuidedMakeup',
+      params: { photoUri, selectedPart }
     });
   };
 
