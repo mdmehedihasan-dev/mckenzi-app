@@ -12,8 +12,8 @@ export default function Comparison() {
   const [sliderPos, setSliderPos] = useState(width / 2);
 
   const beforeImage = photoUri ? { uri: photoUri } : require('../assets/images/face_clean.png');
-  // For 'After', we use a high-quality makeup result from Unsplash to simulate the AI effect
-  const afterImage = { uri: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=2000&auto=format&fit=crop' };
+  // Use the same real photo for 'After' but with a simulated beauty effect
+  const afterImage = photoUri ? { uri: photoUri } : require('../assets/images/face_makeup.png');
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -49,6 +49,8 @@ export default function Comparison() {
           style={[styles.fullImage, { width: width }]} 
           contentFit="cover"
         />
+        {/* Simulated Beauty/Makeup Tint */}
+        <View style={[styles.beautyOverlay, { width: width }]} />
         <View style={styles.labelContainerRight}>
           <Text style={styles.label}>AFTER</Text>
         </View>
@@ -111,6 +113,10 @@ const styles = StyleSheet.create({
   fullImage: {
     width: width,
     height: height,
+  },
+  beautyOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(168, 85, 247, 0.08)', // Subtle purple glow
   },
   sliderHandleContainer: {
     position: 'absolute',
