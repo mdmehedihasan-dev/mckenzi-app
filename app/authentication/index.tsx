@@ -40,7 +40,7 @@ export default function Authentication() {
           <TouchableOpacity 
             style={styles.guestButton}
             activeOpacity={0.8}
-            onPress={() => router.push('/(tabs)' as any)}
+            onPress={() => router.push('/camera' as any)}
           >
             <Text style={styles.guestButtonText}>Continue as Guest</Text>
           </TouchableOpacity>
