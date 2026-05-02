@@ -52,6 +52,15 @@ const EyebrowIcon = ({ color }: { color: string }) => (
   </Svg>
 );
 
+const LayersIcon = ({ color }: { color: string }) => (
+  <Svg width="18" height="22" viewBox="0 0 18 22" fill="none">
+    <Path 
+      d="M7 22V20H2C1.45 20 0.979167 19.8042 0.5875 19.4125C0.195833 19.0208 0 18.55 0 18V4C0 3.45 0.195833 2.97917 0.5875 2.5875C0.979167 2.19583 1.45 2 2 2H7V0H9V22H7ZM2 17H7V11L2 17ZM11 20V11L16 17V4H11V2H16C16.55 2 17.0208 2.19583 17.4125 2.5875C17.8042 2.97917 18 3.45 18 4V18C18 18.55 17.8042 19.0208 17.4125 19.4125C17.0208 19.8042 16.55 20 16 20H11Z" 
+      fill={color} 
+    />
+  </Svg>
+);
+
 const TABS = [
   { id: 'lips', label: 'LIPS', icon: LipsIcon },
   { id: 'eyes', label: 'EYES', icon: EyeIcon },
@@ -157,7 +166,7 @@ export default function MakeupEditor() {
             {/* Save Section */}
             <View style={styles.saveSection}>
               <TouchableOpacity style={styles.layersButton}>
-                <MaterialCommunityIcons name="layers-outline" size={24} color="#FFFFFF" />
+                <LayersIcon color="#FFFFFF" />
               </TouchableOpacity>
               
               <TouchableOpacity style={styles.confirmButton} onPress={handleSave}>
@@ -258,7 +267,7 @@ const styles = StyleSheet.create({
   layersButton: {
     width: 58,
     height: 58,
-    borderRadius: 18,
+    borderRadius: 50,
     backgroundColor: 'rgba(0,0,0,0.65)',
     justifyContent: 'center',
     alignItems: 'center',

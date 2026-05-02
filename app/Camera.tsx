@@ -115,8 +115,6 @@ export default function Camera() {
               </Text>
             )}
           </View>
-
-
         </SafeAreaView>
       </CameraView>
     </View>
