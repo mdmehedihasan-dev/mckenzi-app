@@ -78,7 +78,10 @@ const ManageSubscription = () => {
           
           <View style={styles.separator} />
           
-          <TouchableOpacity style={styles.actionItem}>
+          <TouchableOpacity 
+            style={styles.actionItem}
+            onPress={() => router.push('/premium-access' as any)}
+          >
             <View>
               <Text style={styles.actionText}>Change Plan</Text>
               <Text style={styles.actionSubText}>Upgrade or downgrade your plan</Text>
