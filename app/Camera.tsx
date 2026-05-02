@@ -4,16 +4,53 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { CameraView, useCameraPermissions } from 'expo-camera';
+import { useRef, useEffect } from 'react';
 
 export default function Camera() {
   const [facing, setFacing] = useState<'front' | 'back'>('front');
   const [flash, setFlash] = useState<'on' | 'off'>('off');
   const [permission, requestPermission] = useCameraPermissions();
+  const [countdown, setCountdown] = useState<number | null>(null);
+  const [isDetected, setIsDetected] = useState(false);
+  const cameraRef = useRef<CameraView>(null);
 
-  const handleCapture = () => {
-    // Navigate to Face Analysis
-    router.push('/FaceAnalysis');
+  const handleCapture = async () => {
+    if (cameraRef.current) {
+      try {
+        const photo = await cameraRef.current.takePictureAsync();
+        if (photo) {
+          router.push({
+            pathname: '/FaceAnalysis',
+            params: { photoUri: photo.uri }
+          });
+        }
+      } catch (error) {
+        console.error("Failed to take picture:", error);
+      }
+    }
   };
+
+  useEffect(() => {
+    if (permission?.granted) {
+      // Simulate face detection after 1.5s
+      const detectionTimer = setTimeout(() => {
+        setIsDetected(true);
+        setCountdown(3);
+      }, 1500);
+      return () => clearTimeout(detectionTimer);
+    }
+  }, [permission]);
+
+  useEffect(() => {
+    if (countdown === null) return;
+
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      handleCapture();
+    }
+  }, [countdown]);
 
   const toggleCameraFacing = () => {
     setFacing(current => (current === 'back' ? 'front' : 'back'));
@@ -43,6 +80,7 @@ export default function Camera() {
       <StatusBar style="light" />
       
       <CameraView 
+        ref={cameraRef}
         style={styles.viewfinder} 
         facing={facing}
         enableTorch={flash === 'on'}
@@ -67,8 +105,16 @@ export default function Camera() {
 
           {/* Camera Frame / Guide */}
           <View style={styles.guideContainer}>
-            <View style={styles.faceGuide} />
-            <Text style={styles.guideText}>Position your face within the frame</Text>
+            <View style={[styles.faceGuide, isDetected && styles.faceGuideDetected]} />
+            {countdown !== null && countdown > 0 ? (
+              <View style={styles.countdownContainer}>
+                <Text style={styles.countdownText}>{countdown}</Text>
+              </View>
+            ) : (
+              <Text style={styles.guideText}>
+                {isDetected ? "Hold still... Capturing" : "Position your face within the frame"}
+              </Text>
+            )}
           </View>
 
           {/* Bottom Bar */}
@@ -149,6 +195,24 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.5)',
     borderRadius: 140,
     borderStyle: 'dashed',
+  },
+  faceGuideDetected: {
+    borderColor: '#A855F7',
+    borderStyle: 'solid',
+    borderWidth: 3,
+  },
+  countdownContainer: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  countdownText: {
+    color: '#FFFFFF',
+    fontSize: 80,
+    fontWeight: '800',
+    textShadowColor: 'rgba(168, 85, 247, 0.8)',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 20,
   },
   guideText: {
     color: '#FFFFFF',

@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View, Text, SafeAreaView, ImageBackground, Animated, Easing } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
 export default function FaceAnalysis() {
+  const { photoUri } = useLocalSearchParams<{ photoUri: string }>();
   const scanAnim = useRef(new Animated.Value(0)).current;
   
   useEffect(() => {
@@ -28,7 +29,10 @@ export default function FaceAnalysis() {
 
     // After 4 seconds of "scanning", navigate to the Editor
     const timer = setTimeout(() => {
-      router.push('/MakeupEditor');
+      router.push({
+        pathname: '/MakeupEditor',
+        params: { photoUri }
+      });
     }, 4500);
 
     return () => clearTimeout(timer);
@@ -44,9 +48,9 @@ export default function FaceAnalysis() {
       <StatusBar style="light" />
       
       <ImageBackground 
-        source={require('../assets/images/face_clean.png')} 
+        source={photoUri ? { uri: photoUri } : require('../assets/images/face_clean.png')} 
         style={styles.backgroundImage}
-        imageStyle={{ opacity: 0.7, tintColor: '#555' }} // Desaturate effect
+        imageStyle={{ opacity: 0.8 }} // Less desaturation for real photo
       >
         <SafeAreaView style={styles.overlay}>
           {/* Header */}

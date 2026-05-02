@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity, ScrollView, Button } from 'react-native';
 import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 
@@ -13,6 +13,7 @@ const STEPS = [
 ];
 
 export default function MakeupEditor() {
+  const { photoUri } = useLocalSearchParams<{ photoUri: string }>();
   const [stepIndex, setStepIndex] = useState(0);
   const [permission, requestPermission] = useCameraPermissions();
 
@@ -37,7 +38,10 @@ export default function MakeupEditor() {
     if (stepIndex < STEPS.length - 1) {
       setStepIndex(stepIndex + 1);
     } else {
-      router.push('/Comparison');
+      router.push({
+        pathname: '/Comparison',
+        params: { photoUri }
+      });
     }
   };
 

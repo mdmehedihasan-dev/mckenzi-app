@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, SafeAreaView, Image, TouchableOpacity, PanResponder, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity, PanResponder, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { Image } from 'expo-image';
 
 const { width, height } = Dimensions.get('window');
 
 export default function Comparison() {
+  const { photoUri } = useLocalSearchParams<{ photoUri: string }>();
   const [sliderPos, setSliderPos] = useState(width / 2);
+
+  const beforeImage = photoUri ? { uri: photoUri } : require('../assets/images/face_clean.png');
+  // For 'After', we use a high-quality makeup result from Unsplash to simulate the AI effect
+  const afterImage = { uri: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=2000&auto=format&fit=crop' };
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -27,9 +33,9 @@ export default function Comparison() {
       {/* Before Image (Bottom Layer) */}
       <View style={styles.imageLayer}>
         <Image 
-          source={require('../assets/images/face_clean.png')} 
+          source={beforeImage} 
           style={styles.fullImage}
-          resizeMode="cover"
+          contentFit="cover"
         />
         <View style={styles.labelContainerLeft}>
           <Text style={styles.label}>BEFORE</Text>
@@ -39,9 +45,9 @@ export default function Comparison() {
       {/* After Image (Top Layer, Clipped) */}
       <View style={[styles.imageLayer, { width: sliderPos, overflow: 'hidden', position: 'absolute', top: 0, left: 0, zIndex: 1 }]}>
         <Image 
-          source={require('../assets/images/face_makeup.png')} 
-          style={[styles.fullImage, { width: width }]} // Keep image size constant
-          resizeMode="cover"
+          source={afterImage} 
+          style={[styles.fullImage, { width: width }]} 
+          contentFit="cover"
         />
         <View style={styles.labelContainerRight}>
           <Text style={styles.label}>AFTER</Text>
