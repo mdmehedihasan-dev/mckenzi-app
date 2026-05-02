@@ -94,7 +94,6 @@ const TABS = [
 export default function MakeupEditor() {
   const { photoUri } = useLocalSearchParams<{ photoUri: string }>();
   const [activeTab, setActiveTab] = React.useState('lips');
-  
   const [activeAction, setActiveAction] = React.useState('swap');
   
   const handleBack = () => {
@@ -137,55 +136,59 @@ export default function MakeupEditor() {
 
           {/* Control Section */}
           <View style={styles.controlSection}>
-            
-            
-
             {/* Main Tabs */}
             <View style={styles.tabsContainer}>
               {/* Quick Actions */}
-            <View style={styles.quickActionsRow}>
-              <TouchableOpacity 
-                style={[styles.actionCircle, activeAction === 'swap' && { backgroundColor: '#362645', borderColor: '#362645' }]} 
-                onPress={() => setActiveAction('swap')}
-              >
-                <Ionicons 
-                  name="swap-horizontal" 
-                  size={22} 
-                  color="#FFFFFF" 
-                />
-              </TouchableOpacity>
-              <TouchableOpacity 
-                style={[styles.actionCircle, activeAction === 'eyebrow' && { backgroundColor: '#362645', borderColor: '#362645' }]} 
-                onPress={() => setActiveAction('eyebrow')}
-              >
-                <EyebrowIcon color="#FFFFFF" />
-              </TouchableOpacity>
-            </View>
-             <View style={{height: 30}}></View>
+              <View style={styles.quickActionsRow}>
+                <TouchableOpacity 
+                  style={[styles.actionCircle, activeAction === 'swap' && { backgroundColor: '#362645', borderColor: '#362645' }]} 
+                  onPress={() => setActiveAction('swap')}
+                >
+                  <Ionicons name="swap-horizontal" size={22} color="#FFFFFF" />
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  style={[styles.actionCircle, activeAction === 'eyebrow' && { backgroundColor: '#362645', borderColor: '#362645' }]} 
+                  onPress={() => setActiveAction('eyebrow')}
+                >
+                  <EyebrowIcon color="#FFFFFF" />
+                </TouchableOpacity>
+              </View>
+              
+              <View style={{height: 30}}></View>
+              
               <View style={styles.tabsInner}>
-                {TABS.map((tab) => (
-                  <TouchableOpacity 
-                    key={tab.id}
-                    style={styles.tabButton}
-                    onPress={() => setActiveTab(tab.id)}
-                  >
-                    {typeof tab.icon === 'function' ? (
-                      <tab.icon color={activeTab === tab.id ? '#D8B4FE' : '#FFFFFF'} />
-                    ) : (
-                      <MaterialCommunityIcons 
-                        name={tab.icon as any} 
-                        size={26} 
-                        color={activeTab === tab.id ? '#D8B4FE' : '#FFFFFF'} 
-                      />
-                    )}
-                    <Text style={[
-                      styles.tabButtonText, 
-                      { color: activeTab === tab.id ? '#D8B4FE' : '#9CA3AF' }
-                    ]}>
-                      {tab.label}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                {TABS.map((tab) => {
+                  const Icon = tab.icon;
+                  const isActive = activeTab === tab.id;
+                  const iconColor = isActive ? '#D8B4FE' : '#FFFFFF';
+                  
+                  return (
+                    <TouchableOpacity 
+                      key={tab.id}
+                      style={styles.tabButton}
+                      onPress={() => {
+                        setActiveTab(tab.id);
+                        setActiveAction('none'); // Clear quick action when switching tabs
+                      }}
+                    >
+                      {typeof Icon === 'function' ? (
+                        <Icon color={iconColor} />
+                      ) : (
+                        <MaterialCommunityIcons 
+                          name={Icon as any} 
+                          size={26} 
+                          color={iconColor} 
+                        />
+                      )}
+                      <Text style={[
+                        styles.tabButtonText, 
+                        { color: isActive ? '#D8B4FE' : '#9CA3AF' }
+                      ]}>
+                        {tab.label}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
             </View>
 
