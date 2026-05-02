@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Image, Dimensions } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -36,9 +36,9 @@ export default function Onboarding() {
     }
   };
 
-  const handleSkip = () => {
-    router.push('/Authentication');
-  };
+  // const handleSkip = () => {
+  //   router.push('/Authentication');
+  // };
 
   const currentStep = ONBOARDING_DATA[currentIndex];
 
@@ -47,12 +47,12 @@ export default function Onboarding() {
       <StatusBar style="dark" />
       
       {/* Header */}
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.brandName}>GLAMGUIDE.AI</Text>
         <TouchableOpacity onPress={handleSkip}>
           <Text style={styles.skipText}>SKIP</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       {/* Content */}
       <View style={styles.content}>
