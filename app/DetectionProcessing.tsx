@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { StyleSheet, View, Text, SafeAreaView, ImageBackground, Animated, Easing, TouchableOpacity } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useRef } from 'react';
+import { Animated, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 const EyebrowCurve = ({ style }: { style: any }) => (
@@ -195,12 +195,15 @@ export default function DetectionProcessing() {
             {showActions && (
               <Animated.View style={[
                 styles.modalContainer, 
-                { transform: [{ translateY: modalAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [500, 0]
-                }) }] }
+                { 
+                  opacity: modalAnim,
+                  transform: [{ scale: modalAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.9, 1]
+                  }) }] 
+                }
               ]}>
-                <View style={styles.modalContent}>
+                <View style={[styles.modalContent, { width: '100%' }]}>
                   <Text style={styles.modalTitle}>What would you like to do?</Text>
                   <Text style={styles.modalSub}>CHOOSE ACTION</Text>
                   
@@ -335,15 +338,16 @@ const styles = StyleSheet.create({
     opacity: 0.9,
   },
   modalContainer: {
-    position: 'absolute',
-    bottom: 50,
-    left: 20,
-    right: 20,
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
     zIndex: 100,
+    backgroundColor: 'rgba(0,0,0,0.2)', // Subtle dim when modal appears
   },
   modalContent: {
     backgroundColor: 'rgba(12, 12, 12, 0.92)',
-    borderRadius: 32,
+    borderRadius: 28,
     padding: 30,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.08)',
