@@ -1,9 +1,9 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Image } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import React from 'react';
+import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 
 /**
  * Authentication Screen component
@@ -14,29 +14,22 @@ export default function Authentication() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
-      
-      {/* Background Glow Effect - Top */}
-      <View style={styles.glowContainer}>
-        <View style={styles.glow} />
-      </View>
 
       <View style={styles.mainContent}>
         {/* Logo Section */}
         <View style={styles.logoWrapper}>
-          <View style={styles.logoBox}>
-            <Image 
-              source={require('../assets/images/logo_main.png')} 
-              style={styles.logo}
-              resizeMode="contain"
-            />
-          </View>
+          <Image 
+            source={require('../assets/images/logo_main.png')} 
+            style={styles.logo}
+            resizeMode="contain"
+          />
         </View>
 
         {/* Text Content */}
         <View style={styles.textContainer}>
           <Text style={styles.title}>Get Started</Text>
           <Text style={styles.subtitle}>
-            Try makeup in real-time or sign in to save your looks.
+            Try makeup in real-time or sign in to save your looks
           </Text>
         </View>
 
@@ -68,7 +61,13 @@ export default function Authentication() {
             style={styles.googleButton}
             activeOpacity={0.8}
           >
-            <FontAwesome name="google" size={18} color="#EA4335" />
+            <Image 
+              source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg' }}
+              style={styles.socialIcon}
+              resizeMode="contain"
+            />
+            {/* Using FontAwesome as backup if image URI fails or for consistency */}
+            <FontAwesome name="google" size={18} color="#EA4335" style={{ display: 'none' }} />
             <Text style={styles.googleButtonText}>Continue with Google</Text>
           </TouchableOpacity>
         </View>
@@ -89,108 +88,87 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  glowContainer: {
-    position: 'absolute',
-    top: -150,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    zIndex: 0,
+  header: {
+    paddingHorizontal: 24,
+    paddingTop: 10,
   },
-  glow: {
-    width: 500,
-    height: 500,
-    borderRadius: 250,
-    backgroundColor: '#F3E8FF', // Very light purple glow
-    opacity: 0.6,
+  headerTitle: {
+    fontSize: 16,
+    color: '#5A7D9A', // Blueish color from screenshot
+    fontWeight: '600',
   },
   mainContent: {
     flex: 1,
-    zIndex: 1,
-    paddingHorizontal: 24,
-    justifyContent: 'space-between',
-    paddingVertical: 40,
+    paddingHorizontal: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   logoWrapper: {
     alignItems: 'center',
-    marginTop: 40,
-  },
-  logoBox: {
-    width: 100,
-    height: 100,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#5A31F4',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.1,
-    shadowRadius: 20,
-    elevation: 10,
+    marginBottom: 60,
   },
   logo: {
-    width: 60,
-    height: 60,
+    width: 120,
+    height: 120,
+    tintColor: '#5E33E1', // Purple color from screenshot logo
   },
   textContainer: {
     alignItems: 'center',
-    marginTop: 20,
+    marginBottom: 50,
   },
   title: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: '#1A1A1A',
-    marginBottom: 12,
-    letterSpacing: -0.5,
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#000000',
+    marginBottom: 16,
   },
   subtitle: {
-    fontSize: 15,
-    color: '#6B7280',
+    fontSize: 16,
+    color: '#707070',
     textAlign: 'center',
-    lineHeight: 22,
-    paddingHorizontal: 20,
+    lineHeight: 24,
+    paddingHorizontal: 10,
   },
   buttonContainer: {
     width: '100%',
-    marginTop: 40,
   },
   guestButton: {
-    backgroundColor: '#5A31F4', // Brand Purple
-    height: 58,
-    borderRadius: 16,
+    backgroundColor: '#5E33E1', // Purple from screenshot
+    height: 64,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#5A31F4',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 8,
+    shadowColor: '#5E33E1',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 5,
   },
   guestButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '600',
   },
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 24,
+    marginVertical: 35,
   },
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: '#EEEEEE',
   },
   dividerText: {
-    marginHorizontal: 16,
-    color: '#9CA3AF',
+    marginHorizontal: 15,
+    color: '#BBBBBB',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '500',
   },
   appleButton: {
     backgroundColor: '#000000',
-    height: 58,
-    borderRadius: 16,
+    height: 64,
+    borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -200,35 +178,36 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
-    marginLeft: 8,
+    marginLeft: 10,
   },
   googleButton: {
     backgroundColor: '#FFFFFF',
-    height: 58,
-    borderRadius: 16,
+    height: 64,
+    borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: '#F0F0F0',
   },
   googleButtonText: {
-    color: '#1F2937',
+    color: '#000000',
     fontSize: 16,
     fontWeight: '600',
-    marginLeft: 8,
+    marginLeft: 10,
   },
   socialIcon: {
-    width: 20,
-    height: 20,
+    width: 24,
+    height: 24,
   },
   footer: {
+    marginTop: 60,
     alignItems: 'center',
-    marginTop: 20,
   },
   footerText: {
-    fontSize: 12,
-    color: '#9CA3AF',
-    fontWeight: '500',
+    fontSize: 13,
+    color: '#AAAAAA',
+    fontWeight: '400',
   },
 });
+
