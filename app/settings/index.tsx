@@ -13,6 +13,7 @@ import {
 import { Ionicons, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { EditProfileIcon } from '../../components/icons/BrandedIcons';
 
 const SettingItem = ({ 
   icon, 
@@ -96,7 +97,7 @@ export default function Settings() {
           <View style={styles.divider} />
           
           <SettingItem 
-            icon="account-outline" 
+            icon={<EditProfileIcon />} 
             label="Edit Profile" 
             onPress={() => {}} 
           />
