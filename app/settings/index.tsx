@@ -163,7 +163,7 @@ export default function Settings() {
           <SettingItem 
             icon={<SupportIcon />} 
             label="Help & support" 
-            onPress={() => {}} 
+            onPress={() => router.push('/help-support' as any)} 
           />
           <SettingItem 
             icon={<PrivacyIcon />} 
