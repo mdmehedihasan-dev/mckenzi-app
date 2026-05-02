@@ -1,8 +1,9 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { CameraView } from 'expo-camera';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useRef } from 'react';
-import { Animated, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 const EyebrowCurve = ({ style }: { style: any }) => (
@@ -145,10 +146,9 @@ export default function DetectionProcessing() {
     <View style={styles.container}>
       <StatusBar style="light" />
       
-      <ImageBackground 
-        source={photoUri ? { uri: photoUri } : require('../assets/images/logo_main.png')} 
+      <CameraView 
         style={styles.backgroundImage}
-        imageStyle={{ opacity: 0.5, tintColor: '#222' }}
+        facing="front"
       >
         <SafeAreaView style={styles.overlay}>
           {/* Header */}
@@ -237,7 +237,7 @@ export default function DetectionProcessing() {
             )}
           </Animated.View>
         </SafeAreaView>
-      </ImageBackground>
+      </CameraView>
     </View>
   );
 }

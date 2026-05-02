@@ -1,8 +1,9 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 const SaveIcon = () => (
@@ -95,6 +96,7 @@ export default function MakeupEditor() {
   const { photoUri } = useLocalSearchParams<{ photoUri: string }>();
   const [activeTab, setActiveTab] = React.useState('lips');
   const [activeAction, setActiveAction] = React.useState('swap');
+  const [permission, requestPermission] = useCameraPermissions();
   
   const handleBack = () => {
     router.back();
@@ -110,14 +112,24 @@ export default function MakeupEditor() {
     });
   };
 
+  if (!permission) return <View style={styles.container} />;
+  if (!permission.granted) {
+    return (
+      <View style={styles.container}>
+        <TouchableOpacity onPress={requestPermission} style={styles.permissionBtn}>
+          <Text style={{ color: 'white' }}>Grant Camera Permission</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
       
-      <ImageBackground 
-        source={photoUri ? { uri: photoUri } : require('../assets/images/logo_main.png')} 
+      <CameraView 
         style={styles.background}
-        resizeMode="cover"
+        facing="front"
       >
         <SafeAreaView style={styles.overlay}>
           {/* Header */}
@@ -205,7 +217,7 @@ export default function MakeupEditor() {
             </View>
           </View>
         </SafeAreaView>
-      </ImageBackground>
+      </CameraView>
     </View>
   );
 }
@@ -322,6 +334,11 @@ const styles = StyleSheet.create({
     color: '#3E2B63',
     fontSize: 17,
     fontWeight: '800',
+  },
+  permissionBtn: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

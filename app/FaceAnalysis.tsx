@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Text, SafeAreaView, ImageBackground, Animated, Easing, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView, Animated, Easing, TouchableOpacity } from 'react-native';
+import { CameraView } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -106,10 +107,9 @@ export default function FaceAnalysis() {
     <View style={styles.container}>
       <StatusBar style="light" />
       
-      <ImageBackground 
-        source={photoUri ? { uri: photoUri } : require('../assets/images/logo_main.png')} 
+      <CameraView 
         style={styles.backgroundImage}
-        imageStyle={{ opacity: 0.5, tintColor: '#222' }}
+        facing="front"
       >
         <SafeAreaView style={styles.overlay}>
           {/* Header */}
@@ -175,7 +175,7 @@ export default function FaceAnalysis() {
             ))}
           </View>
         </SafeAreaView>
-      </ImageBackground>
+      </CameraView>
     </View>
   );
 }
