@@ -1,23 +1,51 @@
-import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, SafeAreaView, ImageBackground } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 
 export default function Camera() {
+  const [facing, setFacing] = useState<'front' | 'back'>('front');
+  const [flash, setFlash] = useState<'on' | 'off'>('off');
+  const [permission, requestPermission] = useCameraPermissions();
+
   const handleCapture = () => {
     // Navigate to Face Analysis
     router.push('/FaceAnalysis');
   };
 
+  const toggleCameraFacing = () => {
+    setFacing(current => (current === 'back' ? 'front' : 'back'));
+  };
+
+  const toggleFlash = () => {
+    setFlash(current => (current === 'off' ? 'on' : 'off'));
+  };
+
+  if (!permission) {
+    return <View style={styles.container} />;
+  }
+
+  if (!permission.granted) {
+    return (
+      <View style={styles.permissionContainer}>
+        <Text style={styles.permissionText}>We need your permission to show the camera</Text>
+        <TouchableOpacity style={styles.permissionBtn} onPress={requestPermission}>
+          <Text style={styles.permissionBtnText}>Grant Permission</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
       
-      {/* Mock Camera Viewfinder */}
-      <ImageBackground 
-        source={require('../assets/images/face_clean.png')} 
-        style={styles.viewfinder}
+      <CameraView 
+        style={styles.viewfinder} 
+        facing={facing}
+        enableTorch={flash === 'on'}
       >
         <SafeAreaView style={styles.overlay}>
           {/* Top Bar */}
@@ -25,8 +53,12 @@ export default function Camera() {
             <TouchableOpacity onPress={() => router.back()}>
               <Ionicons name="close" size={28} color="#FFFFFF" />
             </TouchableOpacity>
-            <TouchableOpacity>
-              <Ionicons name="flash-outline" size={24} color="#FFFFFF" />
+            <TouchableOpacity onPress={toggleFlash}>
+              <Ionicons 
+                name={flash === 'on' ? "flash" : "flash-outline"} 
+                size={24} 
+                color={flash === 'on' ? "#EAB308" : "#FFFFFF"} 
+              />
             </TouchableOpacity>
             <TouchableOpacity>
               <Ionicons name="settings-outline" size={24} color="#FFFFFF" />
@@ -52,12 +84,12 @@ export default function Camera() {
               <View style={styles.captureInner} />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.flipButton}>
+            <TouchableOpacity style={styles.flipButton} onPress={toggleCameraFacing}>
               <MaterialCommunityIcons name="camera-flip-outline" size={28} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
         </SafeAreaView>
-      </ImageBackground>
+      </CameraView>
     </View>
   );
 }
@@ -73,7 +105,30 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(0,0,0,0.1)',
+    backgroundColor: 'rgba(0,0,0,0.05)',
+  },
+  permissionContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000',
+    padding: 20,
+  },
+  permissionText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  permissionBtn: {
+    backgroundColor: '#A855F7',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 12,
+  },
+  permissionBtnText: {
+    color: '#FFFFFF',
+    fontWeight: '700',
   },
   topBar: {
     flexDirection: 'row',
