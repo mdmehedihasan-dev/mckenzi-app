@@ -9,17 +9,17 @@ const ONBOARDING_DATA = [
   {
     id: 1,
     title: 'Try Makeup in Real Time',
-    image: require('../assets/images/makeup.png'),
+    image: require('../../assets/images/makeup.png'),
   },
   {
     id: 2,
     title: 'Discover Your Style',
-    image: require('../assets/images/Discover.png'),
+    image: require('../../assets/images/Discover.png'),
   },
   {
     id: 3,
     title: 'Step-by-Step Guidance',
-    image: require('../assets/images/step-by-step.png'),
+    image: require('../../assets/images/step-by-step.png'),
     buttonText: 'GET STARTED',
   },
 ];
@@ -32,7 +32,7 @@ export default function Onboarding() {
       setCurrentIndex(currentIndex + 1);
     } else {
       // Navigate to Authentication screen
-      router.push('/Authentication');
+      router.push('/authentication' as any);
     }
   };
 

@@ -23,7 +23,7 @@ export default function GuidedMakeup() {
 
   const handleNext = () => {
     router.push({
-      pathname: '/Comparison',
+      pathname: '/comparison' as any,
       params: { photoUri }
     });
   };

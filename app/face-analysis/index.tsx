@@ -73,7 +73,7 @@ export default function FaceAnalysis() {
     const sequence = async () => {
       // Navigate to Editor
       router.push({
-        pathname: '/MakeupEditor',
+        pathname: '/makeup-editor' as any,
         params: { photoUri }
       });
     };
@@ -101,7 +101,10 @@ export default function FaceAnalysis() {
               <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
             </TouchableOpacity>
             <Text style={styles.brandText}>GLAMGUIDE AI</Text>
-            <TouchableOpacity style={styles.headerBtn}>
+            <TouchableOpacity 
+              style={styles.headerBtn}
+              onPress={() => router.push('/settings' as any)}
+            >
               <Ionicons name="settings-outline" size={24} color="#FFFFFF" />
             </TouchableOpacity>
           </View>

@@ -5,7 +5,7 @@ import React from 'react';
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
-import { GoogleGLogo } from '../components/icons/GoogleIcons';
+import { GoogleGLogo } from '../../components/icons/GoogleIcons';
 
 /**
  * Authentication Screen component
@@ -21,7 +21,7 @@ export default function Authentication() {
         {/* Logo Section */}
         <View style={styles.logoWrapper}>
           <Image 
-            source={require('../assets/images/logo_main.png')} 
+            source={require('../../assets/images/logo_main.png')} 
             style={styles.logo}
             resizeMode="contain"
           />
@@ -40,7 +40,7 @@ export default function Authentication() {
           <TouchableOpacity 
             style={styles.guestButton}
             activeOpacity={0.8}
-            onPress={() => router.push('/Camera')}
+            onPress={() => router.push('/(tabs)' as any)}
           >
             <Text style={styles.guestButtonText}>Continue as Guest</Text>
           </TouchableOpacity>

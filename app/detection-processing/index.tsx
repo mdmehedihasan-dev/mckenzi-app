@@ -7,8 +7,8 @@ import { Animated, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from
 import Svg, { Path } from 'react-native-svg';
 
 // Import Visuals and Icons
-import { EyebrowsPair, LipsCurve, EyeCurve } from '../components/visuals/FacialDetection';
-import { SymmetryIcon, FillIcon, StyleIcon } from '../components/icons/BrandedIcons';
+import { EyebrowsPair, LipsCurve, EyeCurve } from '../../components/visuals/FacialDetection';
+import { SymmetryIcon, FillIcon, StyleIcon } from '../../components/icons/BrandedIcons';
 
 const ACTION_DATA: Record<string, any[]> = {
   'EYEBROW': [
@@ -61,7 +61,7 @@ export default function DetectionProcessing() {
 
   const handleActionSelect = () => {
     router.push({
-      pathname: '/GuidedMakeup',
+      pathname: '/guided-makeup' as any,
       params: { photoUri, selectedPart }
     });
   };
@@ -94,7 +94,10 @@ export default function DetectionProcessing() {
               <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
             </TouchableOpacity>
             <Text style={styles.brandText}>GLAMGUIDE AI</Text>
-            <TouchableOpacity style={styles.headerBtn}>
+            <TouchableOpacity 
+              style={styles.headerBtn}
+              onPress={() => router.push('/settings' as any)}
+            >
               <Ionicons name="settings-outline" size={24} color="#FFFFFF" />
             </TouchableOpacity>
           </View>

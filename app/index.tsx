@@ -20,7 +20,7 @@ export default function Index() {
 
     // Navigate to Onboarding after progress finish
     const timer = setTimeout(() => {
-      router.replace('/Onboarding');
+      router.replace('/onboarding' as any);
     }, 2500);
 
     return () => {

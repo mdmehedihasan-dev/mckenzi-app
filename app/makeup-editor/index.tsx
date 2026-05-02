@@ -15,7 +15,7 @@ import {
   LooksIcon, 
   EyebrowIcon, 
   LayersIcon 
-} from '../components/icons/BrandedIcons';
+} from '../../components/icons/BrandedIcons';
 
 const TABS = [
   { id: 'lips', label: 'LIPS', icon: LipsIcon },
@@ -39,7 +39,7 @@ export default function MakeupEditor() {
     const selectedPart = activeAction === 'eyebrow' ? 'eyebrow' : activeTab;
     
     router.push({
-      pathname: '/DetectionProcessing',
+      pathname: '/detection-processing' as any,
       params: { photoUri, selectedPart }
     });
   };
@@ -70,7 +70,10 @@ export default function MakeupEditor() {
               <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
             </TouchableOpacity>
             <Text style={styles.brandText}>GLAMGUIDE AI</Text>
-            <TouchableOpacity style={styles.headerBtn}>
+            <TouchableOpacity 
+              style={styles.headerBtn}
+              onPress={() => router.push('/settings' as any)}
+            >
               <Ionicons name="settings-outline" size={24} color="#FFFFFF" />
             </TouchableOpacity>
           </View>

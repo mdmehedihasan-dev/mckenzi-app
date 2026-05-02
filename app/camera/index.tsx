@@ -19,7 +19,7 @@ export default function Camera() {
         const photo = await cameraRef.current.takePictureAsync();
         if (photo) {
           router.push({
-            pathname: '/FaceAnalysis',
+            pathname: '/face-analysis' as any,
             params: { photoUri: photo.uri }
           });
         }

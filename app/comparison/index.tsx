@@ -69,13 +69,13 @@ export default function Comparison() {
               <View style={styles.btnRow}>
                  <TouchableOpacity 
                    style={styles.secondaryBtn} 
-                   onPress={() => router.push('/MakeupEditor')}
+                   onPress={() => router.push('/makeup-editor' as any)}
                  >
                     <Text style={styles.secondaryBtnText}>Try Another</Text>
                  </TouchableOpacity>
                  <TouchableOpacity 
                    style={styles.primaryBtn} 
-                   onPress={() => router.push('/Authentication')}
+                   onPress={() => router.push('/authentication' as any)}
                  >
                     <Text style={styles.primaryBtnText}>Save Look</Text>
                  </TouchableOpacity>
