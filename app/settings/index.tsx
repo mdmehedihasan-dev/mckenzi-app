@@ -124,7 +124,7 @@ export default function Settings() {
           <SettingItem 
             icon={<ManageSubscriptionIcon />} 
             label="Manage Subscription" 
-            onPress={() => {}}
+            onPress={() => router.push('/manage-subscription' as any)}
             isLast={true}
           />
         </Section>
