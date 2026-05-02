@@ -99,7 +99,7 @@ export default function Settings() {
           <SettingItem 
             icon={<EditProfileIcon />} 
             label="Edit Profile" 
-            onPress={() => {}} 
+            onPress={() => router.push('/edit-profile' as any)} 
           />
            <SettingItem 
             icon={<LogoutIcon />} 
