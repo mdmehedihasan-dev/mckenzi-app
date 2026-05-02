@@ -43,6 +43,15 @@ const LooksIcon = ({ color }: { color: string }) => (
   </Svg>
 );
 
+const EyebrowIcon = ({ color }: { color: string }) => (
+  <Svg width="20" height="7" viewBox="0 0 20 7" fill="none">
+    <Path 
+      d="M16.3059 0.932107C17.8542 1.44479 19.1888 2.21449 19.9089 3.30461C19.9838 3.41812 20.0135 3.5449 19.9943 3.67026C19.9752 3.79563 19.9081 3.91445 19.8008 4.01295C19.6934 4.11146 19.5503 4.18562 19.3879 4.22685C19.2256 4.26807 19.0506 4.27466 18.8833 4.24587C13.4675 3.31396 8.20094 3.56619 5.10047 5.7906C2 8.01501 1.52747 5.89141 0.617404 4.98887C0.144121 4.52888 -0.0697822 3.95276 0.0200862 3.38005C0.3292 1.50754 3.5349 0.706472 5.6496 0.354C9.08714 -0.218098 13.0574 -0.144666 16.3059 0.932107Z" 
+      fill={color} 
+    />
+  </Svg>
+);
+
 const TABS = [
   { id: 'lips', label: 'LIPS', icon: LipsIcon },
   { id: 'eyes', label: 'EYES', icon: EyeIcon },
@@ -98,7 +107,7 @@ export default function MakeupEditor() {
                 <Ionicons name="swap-horizontal" size={22} color="#FFFFFF" />
               </TouchableOpacity>
               <TouchableOpacity style={styles.actionCircle}>
-                <Ionicons name="reload" size={22} color="#FFFFFF" />
+                <EyebrowIcon color="#FFFFFF" />
               </TouchableOpacity>
             </View>
 
