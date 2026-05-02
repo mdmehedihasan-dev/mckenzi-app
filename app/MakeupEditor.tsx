@@ -5,6 +5,29 @@ import React from 'react';
 import { ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
+const SaveIcon = () => (
+  <Svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <Path 
+      d="M5.33331 14.6667V12.6667C5.33331 11.4096 5.33331 10.7811 5.72384 10.3905C6.11436 10 6.74291 10 7.99998 10C9.25705 10 9.88558 10 10.2761 10.3905C10.6666 10.7811 10.6666 11.4096 10.6666 12.6667V14.6667" 
+      stroke="#3E2B63" 
+      strokeWidth="1.5" 
+      strokeLinejoin="round"
+    />
+    <Path 
+      d="M6.66669 4.66663H9.33335" 
+      stroke="#3E2B63" 
+      strokeWidth="1.5" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    <Path 
+      d="M2 7.90564C2 4.8547 2 3.32921 2.92449 2.36267C2.95865 2.32696 2.99359 2.29202 3.02929 2.25787C3.99584 1.33337 5.52133 1.33337 8.57227 1.33337C9.29533 1.33337 9.64367 1.33588 9.9752 1.45961C10.2945 1.57877 10.5619 1.80163 11.0968 2.24737L12.5607 3.46732C13.2685 4.05711 13.6223 4.35201 13.8112 4.75515C14 5.15829 14 5.61893 14 6.54021V8.66671C14 11.1665 14 12.4164 13.3634 13.2926C13.1578 13.5756 12.9089 13.8245 12.6259 14.0301C11.7497 14.6667 10.4998 14.6667 8 14.6667C5.50018 14.6667 4.25027 14.6667 3.37405 14.0301C3.09107 13.8245 2.84221 13.5756 2.63661 13.2926C2 12.4164 2 11.1665 2 8.66671V7.90564Z" 
+      stroke="#3E2B63" 
+      strokeWidth="1.5"
+    />
+  </Svg>
+);
+
 const LipsIcon = ({ color }: { color: string }) => (
   <Svg width="24" height="15" viewBox="0 0 23 14" fill="none">
     <Path 
@@ -79,9 +102,12 @@ export default function MakeupEditor() {
   };
 
   const handleSave = () => {
+    // Determine the selected part to show detection for
+    const selectedPart = activeAction === 'eyebrow' ? 'eyebrow' : activeTab;
+    
     router.push({
-      pathname: '/Comparison',
-      params: { photoUri }
+      pathname: '/DetectionProcessing',
+      params: { photoUri, selectedPart }
     });
   };
 
@@ -170,7 +196,7 @@ export default function MakeupEditor() {
               </TouchableOpacity>
               
               <TouchableOpacity style={styles.confirmButton} onPress={handleSave}>
-                <MaterialCommunityIcons name="bookmark-outline" size={20} color="#5E33E1" />
+                <SaveIcon />
                 <Text style={styles.confirmButtonText}>Save Look</Text>
               </TouchableOpacity>
             </View>
@@ -290,7 +316,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
   confirmButtonText: {
-    color: '#5E33E1',
+    color: '#3E2B63',
     fontSize: 17,
     fontWeight: '800',
   },

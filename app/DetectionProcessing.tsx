@@ -1,11 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View, Text, SafeAreaView, ImageBackground, Animated, Easing, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import Svg, { Path } from 'react-native-svg';
-
-type Phase = 'SCANNING' | 'EYEBROWS' | 'LIPS' | 'FACE';
 
 const EyebrowCurve = ({ style }: { style: any }) => (
   <View style={style}>
@@ -42,65 +40,52 @@ const LipsCurve = () => (
   </View>
 );
 
-export default function FaceAnalysis() {
-  const { photoUri } = useLocalSearchParams<{ photoUri: string }>();
-  const [phase, setPhase] = useState<Phase>('SCANNING');
-  const scanAnim = useRef(new Animated.Value(0)).current;
+const EyeCurve = ({ style }: { style: any }) => (
+  <View style={style}>
+    <Svg width="80" height="40" viewBox="0 0 80 40" fill="none">
+      <Path 
+        d="M10 20C20 10 60 10 70 20C60 30 20 30 10 20Z" 
+        stroke="#D8B4FE" 
+        strokeWidth="2" 
+        strokeLinecap="round"
+        opacity="0.8"
+      />
+    </Svg>
+  </View>
+);
+
+export default function DetectionProcessing() {
+  const { photoUri, selectedPart } = useLocalSearchParams<{ photoUri: string, selectedPart: string }>();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   
   useEffect(() => {
-    // Initial scanning animation
-    const scanLoop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(scanAnim, {
-          toValue: 1,
-          duration: 2000,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-        Animated.timing(scanAnim, {
-          toValue: 0,
-          duration: 2000,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    scanLoop.start();
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 800,
+      useNativeDriver: true,
+    }).start();
 
-    // Sequence of detection phases
-    const sequence = async () => {
-      // 1. Scan for 3 seconds
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      scanLoop.stop();
-      
-      // 2. Detection: Eyebrows
-      setPhase('EYEBROWS');
-      Animated.timing(fadeAnim, { toValue: 1, duration: 500, useNativeDriver: true }).start();
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // 3. Detection: Lips
-      setPhase('LIPS');
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // 4. Final: Face Detection complete
-      setPhase('FACE');
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Navigate to Editor
+    // After showing the detection for 2.5 seconds, go to Comparison
+    const timer = setTimeout(() => {
       router.push({
-        pathname: '/MakeupEditor',
+        pathname: '/Comparison',
         params: { photoUri }
       });
-    };
+    }, 2500);
 
-    sequence();
+    return () => clearTimeout(timer);
   }, []);
 
-  const translateY = scanAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [150, 500], 
-  });
+  const getLabel = () => {
+    switch (selectedPart?.toUpperCase()) {
+      case 'EYEBROW': return "Eyebrow's Detected";
+      case 'LIPS': return "Lips Detected";
+      case 'EYES': return "Eyes Detected";
+      case 'FACE': return "Face Structure Detected";
+      case 'LOOKS': return "Total Look Mapped";
+      default: return `${selectedPart} Detected`;
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -123,57 +108,31 @@ export default function FaceAnalysis() {
             </TouchableOpacity>
           </View>
 
-          {/* Scanning Line (Only in SCANNING phase) */}
-          {phase === 'SCANNING' && (
-            <Animated.View style={[styles.scanLine, { transform: [{ translateY }] }]}>
-              <View style={styles.scanBadge}>
-                <View style={styles.pulseDot} />
-                <Text style={styles.scanText}>ANALYZING FEATURES</Text>
-              </View>
-            </Animated.View>
-          )}
-
           {/* Detection Visuals */}
           <Animated.View style={[styles.detectionLayer, { opacity: fadeAnim }]}>
-            {phase === 'EYEBROWS' && (
+            {(selectedPart?.toUpperCase() === 'EYEBROW' || selectedPart?.toUpperCase() === 'LOOKS') && (
               <>
                 <EyebrowCurve style={styles.eyebrowLeft} />
                 <EyebrowCurve style={styles.eyebrowRight} />
-                <View style={styles.statusBadge}>
-                  <View style={styles.statusDot} />
-                  <Text style={styles.statusText}>Eyebrow's Detected</Text>
-                </View>
               </>
             )}
 
-            {phase === 'LIPS' && (
+            {(selectedPart?.toUpperCase() === 'LIPS' || selectedPart?.toUpperCase() === 'LOOKS') && (
+              <LipsCurve />
+            )}
+
+            {(selectedPart?.toUpperCase() === 'EYES' || selectedPart?.toUpperCase() === 'LOOKS') && (
               <>
-                <LipsCurve />
-                <View style={styles.statusBadge}>
-                  <View style={styles.statusDot} />
-                  <Text style={styles.statusText}>Lips Detected</Text>
-                </View>
+                <EyeCurve style={styles.eyeLeft} />
+                <EyeCurve style={styles.eyeRight} />
               </>
             )}
 
-            {phase === 'FACE' && (
-              <View style={styles.statusBadge}>
-                <View style={[styles.statusDot, { backgroundColor: '#10B981' }]} />
-                <Text style={styles.statusText}>Face Analysis Complete</Text>
-              </View>
-            )}
+            <View style={styles.statusBadge}>
+              <View style={styles.statusDot} />
+              <Text style={styles.statusText}>{getLabel()}</Text>
+            </View>
           </Animated.View>
-
-          {/* Background Point Grid (Subtle) */}
-          <View style={styles.gridContainer}>
-            {[...Array(12)].map((_, i) => (
-              <View key={i} style={[styles.point, { 
-                top: `${20 + Math.random() * 60}%`, 
-                left: `${20 + Math.random() * 60}%`,
-                opacity: phase === 'SCANNING' ? 0.3 : 0.6
-              }]} />
-            ))}
-          </View>
         </SafeAreaView>
       </ImageBackground>
     </View>
@@ -215,40 +174,6 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     letterSpacing: 2,
   },
-  scanLine: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    height: 2,
-    backgroundColor: '#D8B4FE',
-    shadowColor: '#D8B4FE',
-    shadowRadius: 15,
-    shadowOpacity: 1,
-    zIndex: 10,
-  },
-  scanBadge: {
-    position: 'absolute',
-    right: 20,
-    top: -30,
-    backgroundColor: 'rgba(0,0,0,0.7)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  scanText: {
-    color: '#D8B4FE',
-    fontSize: 10,
-    fontWeight: '800',
-  },
-  pulseDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#D8B4FE',
-  },
   detectionLayer: {
     flex: 1,
     justifyContent: 'center',
@@ -265,6 +190,16 @@ const styles = StyleSheet.create({
     top: '35%',
     right: '15%',
     transform: [{ scaleX: -1 }],
+  },
+  eyeLeft: {
+    position: 'absolute',
+    top: '42%',
+    left: '20%',
+  },
+  eyeRight: {
+    position: 'absolute',
+    top: '42%',
+    right: '20%',
   },
   lipsContainer: {
     position: 'absolute',
@@ -299,16 +234,4 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     opacity: 0.9,
   },
-  gridContainer: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: -1,
-  },
-  point: {
-    position: 'absolute',
-    width: 3,
-    height: 3,
-    borderRadius: 1.5,
-    backgroundColor: '#D8B4FE',
-  },
 });
-

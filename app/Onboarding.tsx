@@ -36,9 +36,7 @@ export default function Onboarding() {
     }
   };
 
-  // const handleSkip = () => {
-  //   router.push('/Authentication');
-  // };
+
 
   const currentStep = ONBOARDING_DATA[currentIndex];
 
@@ -46,13 +44,7 @@ export default function Onboarding() {
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
       
-      {/* Header */}
-      {/* <View style={styles.header}>
-        <Text style={styles.brandName}>GLAMGUIDE.AI</Text>
-        <TouchableOpacity onPress={handleSkip}>
-          <Text style={styles.skipText}>SKIP</Text>
-        </TouchableOpacity>
-      </View> */}
+  
 
       {/* Content */}
       <View style={styles.content}>
