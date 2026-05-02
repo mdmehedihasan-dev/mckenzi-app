@@ -168,12 +168,17 @@ export default function Settings() {
           <SettingItem 
             icon={<PrivacyIcon />} 
             label="Privacy Policy" 
-            onPress={() => {}} 
+            onPress={() => router.push('/privacy-policy' as any)} 
           />
           <SettingItem 
             icon={<TermsIcon />} 
-            label="Terms of Service" 
-            onPress={() => {}} 
+            label="Terms of Conditions" 
+            onPress={() => router.push('/terms-conditions' as any)} 
+          />
+          <SettingItem 
+            icon={<SupportIcon />} 
+            label="About us" 
+            onPress={() => router.push('/about-us' as any)} 
           />
           <SettingItem 
             icon={<VersionIcon />} 
