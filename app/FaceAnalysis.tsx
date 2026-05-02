@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Text, SafeAreaView, Animated, Easing, TouchableOpacity } from 'react-native';
-import { CameraView } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
+import { CameraView } from 'expo-camera';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, Easing, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 type Phase = 'SCANNING' | 'EYEBROWS' | 'LIPS' | 'FACE';
@@ -71,23 +71,6 @@ export default function FaceAnalysis() {
 
     // Sequence of detection phases
     const sequence = async () => {
-      // 1. Scan for 3 seconds
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      scanLoop.stop();
-      
-      // 2. Detection: Eyebrows
-      setPhase('EYEBROWS');
-      Animated.timing(fadeAnim, { toValue: 1, duration: 500, useNativeDriver: true }).start();
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // 3. Detection: Lips
-      setPhase('LIPS');
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // 4. Final: Face Detection complete
-      setPhase('FACE');
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
       // Navigate to Editor
       router.push({
         pathname: '/MakeupEditor',
