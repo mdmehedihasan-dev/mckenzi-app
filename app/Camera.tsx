@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { CameraView, useCameraPermissions } from 'expo-camera';
-import { useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function Camera() {
   const [facing, setFacing] = useState<'front' | 'back'>('front');
@@ -117,23 +116,7 @@ export default function Camera() {
             )}
           </View>
 
-          {/* Bottom Bar */}
-          <View style={styles.bottomBar}>
-            <TouchableOpacity style={styles.galleryButton}>
-              <Ionicons name="images-outline" size={28} color="#FFFFFF" />
-            </TouchableOpacity>
 
-            <TouchableOpacity 
-              style={styles.captureButton}
-              onPress={handleCapture}
-            >
-              <View style={styles.captureInner} />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.flipButton} onPress={toggleCameraFacing}>
-              <MaterialCommunityIcons name="camera-flip-outline" size={28} color="#FFFFFF" />
-            </TouchableOpacity>
-          </View>
         </SafeAreaView>
       </CameraView>
     </View>
