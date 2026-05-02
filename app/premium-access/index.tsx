@@ -1,7 +1,6 @@
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { PrecisionToolsIcon, PremiumSparkleIcon, InfiniteStorageIcon, PriorityCurationIcon } from '../../components/icons/BrandedIcons';
 import React from 'react';
 import {
   SafeAreaView,
@@ -11,6 +10,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import { InfiniteStorageIcon, PrecisionToolsIcon, PriorityCurationIcon } from '../../components/icons/BrandedIcons';
 
 const FeatureItem = ({ icon, title, description }: { icon: any, title: string, description: string }) => (
   <View style={styles.featureItem}>
@@ -173,7 +173,6 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: '#F3E5F5',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
