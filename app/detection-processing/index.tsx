@@ -32,6 +32,8 @@ const ACTION_DATA: Record<string, any[]> = {
   ]
 };
 
+import { Image } from 'react-native';
+
 export default function DetectionProcessing() {
   const { photoUri, selectedPart } = useLocalSearchParams<{ photoUri: string, selectedPart: string }>();
   const [showActions, setShowActions] = React.useState(false);
@@ -83,10 +85,13 @@ export default function DetectionProcessing() {
     <View style={styles.container}>
       <StatusBar style="light" />
       
-      <CameraView 
-        style={styles.backgroundImage}
-        facing="front"
-      >
+      <View style={styles.backgroundImage}>
+        {photoUri ? (
+          <Image source={{ uri: photoUri }} style={StyleSheet.absoluteFill} resizeMode="cover" />
+        ) : (
+          <View style={[StyleSheet.absoluteFill, { backgroundColor: '#1A1A1A' }]} />
+        )}
+        
         <SafeAreaView style={styles.overlay}>
           {/* Header */}
           <View style={styles.header}>
@@ -174,7 +179,7 @@ export default function DetectionProcessing() {
             )}
           </Animated.View>
         </SafeAreaView>
-      </CameraView>
+      </View>
     </View>
   );
 }

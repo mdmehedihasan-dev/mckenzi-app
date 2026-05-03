@@ -7,6 +7,8 @@ import { CameraView } from 'expo-camera';
 
 const { width, height } = Dimensions.get('window');
 
+import { Image } from 'react-native';
+
 export default function Comparison() {
   const { photoUri } = useLocalSearchParams<{ photoUri: string }>();
   const [sliderPos, setSliderPos] = useState(width / 2);
@@ -26,12 +28,23 @@ export default function Comparison() {
     <View style={styles.container}>
       <StatusBar style="light" />
       
-      {/* Background: Live Camera Feed */}
-      <CameraView style={StyleSheet.absoluteFill} facing="front" />
+      {/* Background: The Original Photo (Before) */}
+      {photoUri ? (
+        <Image source={{ uri: photoUri }} style={StyleSheet.absoluteFill} resizeMode="cover" />
+      ) : (
+        <View style={[StyleSheet.absoluteFill, { backgroundColor: '#1A1A1A' }]} />
+      )}
 
-      {/* After Layer (Right side of slider) - Simulated with a beauty tint */}
+      {/* After Layer (Right side of slider) - The Photo with a beauty tint */}
       <View style={[styles.imageLayer, { left: sliderPos, right: 0, overflow: 'hidden', position: 'absolute', top: 0, zIndex: 1 }]}>
-        <View style={styles.beautyOverlay} />
+        <View style={{ width: width, height: height, left: -sliderPos }}>
+          {photoUri ? (
+            <Image source={{ uri: photoUri }} style={StyleSheet.absoluteFill} resizeMode="cover" />
+          ) : (
+            <View style={[StyleSheet.absoluteFill, { backgroundColor: '#1A1A1A' }]} />
+          )}
+          <View style={styles.beautyOverlay} />
+        </View>
       </View>
 
       {/* Slider Handle */}

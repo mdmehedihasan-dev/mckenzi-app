@@ -1,9 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
-import { CameraView } from 'expo-camera';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Easing, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Easing, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 type Phase = 'SCANNING' | 'EYEBROWS' | 'LIPS' | 'FACE';
@@ -71,6 +70,22 @@ export default function FaceAnalysis() {
 
     // Sequence of detection phases
     const sequence = async () => {
+      // Phase 1: Scanning (2 seconds)
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Phase 2: Eyebrows
+      setPhase('EYEBROWS');
+      Animated.timing(fadeAnim, { toValue: 1, duration: 500, useNativeDriver: true }).start();
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Phase 3: Lips
+      setPhase('LIPS');
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Phase 4: Face Analysis Complete
+      setPhase('FACE');
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
       // Navigate to Editor
       router.push({
         pathname: '/makeup-editor' as any,
@@ -90,10 +105,13 @@ export default function FaceAnalysis() {
     <View style={styles.container}>
       <StatusBar style="light" />
       
-      <CameraView 
-        style={styles.backgroundImage}
-        facing="front"
-      >
+      <View style={styles.backgroundImage}>
+        {photoUri ? (
+          <Image source={{ uri: photoUri }} style={StyleSheet.absoluteFill} resizeMode="cover" />
+        ) : (
+          <View style={[StyleSheet.absoluteFill, { backgroundColor: '#1A1A1A' }]} />
+        )}
+        
         <SafeAreaView style={styles.overlay}>
           {/* Header */}
           <View style={styles.header}>
@@ -114,7 +132,7 @@ export default function FaceAnalysis() {
             <Animated.View style={[styles.scanLine, { transform: [{ translateY }] }]}>
               <View style={styles.scanBadge}>
                 <View style={styles.pulseDot} />
-                <Text style={styles.scanText}>ANALYZING FEATURES</Text>
+                <Text style={scanTextStyles.text}>ANALYZING FEATURES</Text>
               </View>
             </Animated.View>
           )}
@@ -161,10 +179,19 @@ export default function FaceAnalysis() {
             ))}
           </View>
         </SafeAreaView>
-      </CameraView>
+      </View>
     </View>
   );
 }
+
+const scanTextStyles = StyleSheet.create({
+  text: {
+    color: '#D8B4FE',
+    fontSize: 10,
+    fontWeight: '800',
+  }
+});
+
 
 const styles = StyleSheet.create({
   container: {

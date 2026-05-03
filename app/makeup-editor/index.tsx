@@ -6,6 +6,8 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
+import { Image } from 'react-native';
+
 // Import Branded Icons
 import { 
   SaveIcon, 
@@ -28,7 +30,6 @@ export default function MakeupEditor() {
   const { photoUri } = useLocalSearchParams<{ photoUri: string }>();
   const [activeTab, setActiveTab] = React.useState('lips');
   const [activeAction, setActiveAction] = React.useState('swap');
-  const [permission, requestPermission] = useCameraPermissions();
   
   const handleBack = () => {
     router.back();
@@ -44,25 +45,17 @@ export default function MakeupEditor() {
     });
   };
 
-  if (!permission) return <View style={styles.container} />;
-  if (!permission.granted) {
-    return (
-      <View style={styles.container}>
-        <TouchableOpacity onPress={requestPermission} style={styles.permissionBtn}>
-          <Text style={{ color: 'white' }}>Grant Camera Permission</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
       
-      <CameraView 
-        style={styles.background}
-        facing="front"
-      >
+      <View style={styles.background}>
+        {photoUri ? (
+          <Image source={{ uri: photoUri }} style={StyleSheet.absoluteFill} resizeMode="cover" />
+        ) : (
+          <View style={[StyleSheet.absoluteFill, { backgroundColor: '#1A1A1A' }]} />
+        )}
+        
         <SafeAreaView style={styles.overlay}>
           {/* Header */}
           <View style={styles.header}>
@@ -152,7 +145,7 @@ export default function MakeupEditor() {
             </View>
           </View>
         </SafeAreaView>
-      </CameraView>
+      </View>
     </View>
   );
 }

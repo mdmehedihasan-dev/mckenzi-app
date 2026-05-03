@@ -3,23 +3,11 @@ import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity, Animated } from
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { CameraView, useCameraPermissions } from 'expo-camera';
+import { Image } from 'react-native';
 
 export default function GuidedMakeup() {
   const { photoUri, selectedPart } = useLocalSearchParams<{ photoUri: string, selectedPart: string }>();
-  const [permission, requestPermission] = useCameraPermissions();
   const [step, setStep] = useState(2);
-
-  if (!permission) return <View />;
-  if (!permission.granted) {
-    return (
-      <View style={styles.container}>
-        <TouchableOpacity onPress={requestPermission} style={styles.permissionBtn}>
-          <Text style={{ color: 'white' }}>Grant Camera Permission</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
 
   const handleNext = () => {
     router.push({
@@ -32,7 +20,13 @@ export default function GuidedMakeup() {
     <View style={styles.container}>
       <StatusBar style="light" />
       
-      <CameraView style={StyleSheet.absoluteFill} facing="front" />
+      <View style={StyleSheet.absoluteFill}>
+        {photoUri ? (
+          <Image source={{ uri: photoUri }} style={StyleSheet.absoluteFill} resizeMode="cover" />
+        ) : (
+          <View style={[StyleSheet.absoluteFill, { backgroundColor: '#1A1A1A' }]} />
+        )}
+      </View>
       
       <SafeAreaView style={styles.overlay}>
         {/* Header */}
