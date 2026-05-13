@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Easing, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
+import { Animated, Easing, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 type Phase = 'SCANNING' | 'EYEBROWS' | 'LIPS' | 'FACE';
@@ -10,17 +10,17 @@ type Phase = 'SCANNING' | 'EYEBROWS' | 'LIPS' | 'FACE';
 const EyebrowCurve = ({ style }: { style: any }) => (
   <View style={style}>
     <Svg width="120" height="40" viewBox="0 0 120 40" fill="none">
-      <Path 
-        d="M10 30C30 10 90 10 110 30" 
-        stroke="#D8B4FE" 
-        strokeWidth="2.5" 
+      <Path
+        d="M10 30C30 10 90 10 110 30"
+        stroke="#D8B4FE"
+        strokeWidth="2.5"
         strokeLinecap="round"
         opacity="0.9"
       />
-      <Path 
-        d="M10 35C30 15 90 15 110 35" 
-        stroke="#D8B4FE" 
-        strokeWidth="1" 
+      <Path
+        d="M10 35C30 15 90 15 110 35"
+        stroke="#D8B4FE"
+        strokeWidth="1"
         strokeLinecap="round"
         opacity="0.5"
       />
@@ -31,10 +31,10 @@ const EyebrowCurve = ({ style }: { style: any }) => (
 const LipsCurve = () => (
   <View style={styles.lipsContainer}>
     <Svg width="100" height="40" viewBox="0 0 100 40" fill="none">
-      <Path 
-        d="M10 20C25 5 75 5 90 20C75 35 25 35 10 20Z" 
-        stroke="#D8B4FE" 
-        strokeWidth="2" 
+      <Path
+        d="M10 20C25 5 75 5 90 20C75 35 25 35 10 20Z"
+        stroke="#D8B4FE"
+        strokeWidth="2"
         strokeLinecap="round"
         opacity="0.8"
       />
@@ -47,7 +47,7 @@ export default function FaceAnalysis() {
   const [phase, setPhase] = useState<Phase>('SCANNING');
   const scanAnim = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  
+
   useEffect(() => {
     // Initial scanning animation
     const scanLoop = Animated.loop(
@@ -72,16 +72,16 @@ export default function FaceAnalysis() {
     const sequence = async () => {
       // Phase 1: Scanning (2 seconds)
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       // Phase 2: Eyebrows
       setPhase('EYEBROWS');
       Animated.timing(fadeAnim, { toValue: 1, duration: 500, useNativeDriver: true }).start();
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       // Phase 3: Lips
       setPhase('LIPS');
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       // Phase 4: Face Analysis Complete
       setPhase('FACE');
       await new Promise(resolve => setTimeout(resolve, 1500));
@@ -98,20 +98,20 @@ export default function FaceAnalysis() {
 
   const translateY = scanAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [150, 500], 
+    outputRange: [150, 500],
   });
 
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
-      
+
       <View style={styles.backgroundImage}>
         {photoUri ? (
           <Image source={{ uri: photoUri }} style={StyleSheet.absoluteFill} resizeMode="cover" />
         ) : (
           <View style={[StyleSheet.absoluteFill, { backgroundColor: '#1A1A1A' }]} />
         )}
-        
+
         <SafeAreaView style={styles.overlay}>
           {/* Header */}
           <View style={styles.header}>
@@ -119,7 +119,7 @@ export default function FaceAnalysis() {
               <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
             </TouchableOpacity>
             <Text style={styles.brandText}>GLAMGUIDE AI</Text>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.headerBtn}
               onPress={() => router.push('/settings' as any)}
             >
@@ -145,7 +145,7 @@ export default function FaceAnalysis() {
                 <EyebrowCurve style={styles.eyebrowRight} />
                 <View style={styles.statusBadge}>
                   <View style={styles.statusDot} />
-                  <Text style={styles.statusText}>Eyebrow's Detected</Text>
+                  <Text style={styles.statusText}>Eyebrows Detected</Text>
                 </View>
               </>
             )}
@@ -171,8 +171,8 @@ export default function FaceAnalysis() {
           {/* Background Point Grid (Subtle) */}
           <View style={styles.gridContainer}>
             {[...Array(12)].map((_, i) => (
-              <View key={i} style={[styles.point, { 
-                top: `${20 + Math.random() * 60}%`, 
+              <View key={i} style={[styles.point, {
+                top: `${20 + Math.random() * 60}%`,
                 left: `${20 + Math.random() * 60}%`,
                 opacity: phase === 'SCANNING' ? 0.3 : 0.6
               }]} />
