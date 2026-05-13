@@ -1,9 +1,8 @@
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Svg, { Path } from 'react-native-svg';
 
 import { GoogleGLogo } from '../../components/icons/GoogleIcons';
 
@@ -20,8 +19,8 @@ export default function Authentication() {
       <View style={styles.mainContent}>
         {/* Logo Section */}
         <View style={styles.logoWrapper}>
-          <Image 
-            source={require('../../assets/images/logo_main.png')} 
+          <Image
+            source={require('../../assets/images/logo_main.png')}
             style={styles.logo}
             resizeMode="contain"
           />
@@ -31,13 +30,13 @@ export default function Authentication() {
         <View style={styles.textContainer}>
           <Text style={styles.title}>Get Started</Text>
           <Text style={styles.subtitle}>
-            Try makeup in real-time or sign in to save your looks
+            Try makeup in real time or sign in to save your looks
           </Text>
         </View>
 
         {/* Action Buttons */}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.guestButton}
             activeOpacity={0.8}
             onPress={() => router.push('/camera' as any)}
@@ -51,7 +50,7 @@ export default function Authentication() {
             <View style={styles.dividerLine} />
           </View>
 
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.appleButton}
             activeOpacity={0.8}
           >
@@ -59,7 +58,7 @@ export default function Authentication() {
             <Text style={styles.appleButtonText}>Continue with Apple</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.googleButton}
             activeOpacity={0.8}
           >
